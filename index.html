@@ -25,7 +25,6 @@
     .container {
       position: relative;
       z-index: 2;
-      height: auto;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -130,7 +129,7 @@
       text-decoration: underline;
     }
 
-    #copyZaloBtn {
+    #toggleMusicBtn {
       margin-top: 20px;
       padding: 10px 20px;
       background-color: cyan;
@@ -142,7 +141,7 @@
       box-shadow: 0 0 10px cyan;
     }
 
-    #copyZaloBtn:hover {
+    #toggleMusicBtn:hover {
       box-shadow: 0 0 20px cyan;
     }
 
@@ -169,7 +168,7 @@
       <a href="https://www.youtube.com/@Hmunrex" target="_blank">📺 YouTube</a>
     </div>
 
-    <button id="copyZaloBtn">📋 Lưu số Zalo: 0559705922</button>
+    <button id="toggleMusicBtn">🔊 Bật / Tắt nhạc</button>
 
     <p class="tagline" id="typewriter"></p>
     <p id="clock"></p>
@@ -194,10 +193,49 @@
     </div>
   </div>
 
-  <iframe width="0" height="0" src="https://www.youtube.com/embed/nKpIVrgwrKI?autoplay=1&loop=1&playlist=nKpIVrgwrKI" frameborder="0" allow="autoplay" style="display: none;"></iframe>
+  <!-- Nhạc nền ẩn bằng YouTube API -->
+  <div style="display: none;">
+    <div id="player"></div>
+  </div>
 
+  <!-- YouTube Player API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    // Galaxy stars animation
+    let player;
+    let isPlaying = true;
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '0',
+        width: '0',
+        videoId: 'nKpIVrgwrKI', // Mã video nhạc nền
+        playerVars: {
+          autoplay: 1,
+          loop: 1,
+          playlist: 'nKpIVrgwrKI'
+        },
+        events: {
+          'onReady': function(event) {
+            event.target.playVideo();
+          }
+        }
+      });
+    }
+
+    document.getElementById("toggleMusicBtn").addEventListener("click", () => {
+      if (!player) return;
+      if (isPlaying) {
+        player.pauseVideo();
+        isPlaying = false;
+        document.getElementById("toggleMusicBtn").innerText = "🔈 Bật nhạc";
+      } else {
+        player.playVideo();
+        isPlaying = true;
+        document.getElementById("toggleMusicBtn").innerText = "🔊 Tắt nhạc";
+      }
+    });
+
+    // Galaxy stars
     const canvas = document.getElementById('galaxy');
     const ctx = canvas.getContext('2d');
     let stars = [];
@@ -250,7 +288,7 @@
     createStars(150);
     animateStars();
 
-    // Typewriter quotes
+    // Quotes
     const quotes = [
       "Code là vũ khí, sáng tạo là đạn.",
       "Tool mình viết – chất lượng nói lên tất cả.",
@@ -264,21 +302,13 @@
     setInterval(rotateQuotes, 5000);
     rotateQuotes();
 
-    // Copy Zalo
-    document.getElementById("copyZaloBtn").onclick = () => {
-      navigator.clipboard.writeText("0559705922");
-      alert("Đã sao chép số Zalo!");
-    };
-
-    // Đồng hồ giờ Việt Nam
+    // Đồng hồ
     function updateClock() {
       const nowUTC = new Date();
-      const vnTime = new Date(nowUTC.getTime() + 7 * 60 * 60 * 1000); // UTC + 7
-
+      const vnTime = new Date(nowUTC.getTime() + 7 * 60 * 60 * 1000);
       const hours = vnTime.getUTCHours().toString().padStart(2, '0');
       const minutes = vnTime.getUTCMinutes().toString().padStart(2, '0');
       const seconds = vnTime.getUTCSeconds().toString().padStart(2, '0');
-
       document.getElementById("clock").innerHTML = `🕒 ${hours}:${minutes}:${seconds} (Giờ Việt Nam)`;
     }
     setInterval(updateClock, 1000);
