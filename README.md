@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mun | Trần Hào Profile</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background: black;
+      overflow-x: hidden;
+      color: #fff;
+    }
+
+    canvas#galaxy {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      height: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .avatar {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      border: 4px solid cyan;
+      box-shadow: 0 0 30px cyan;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .avatar:hover {
+      transform: scale(1.05);
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      color: cyan;
+      text-shadow: 0 0 10px cyan;
+      margin: 0;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      color: #aaa;
+      margin: 10px 0 30px;
+    }
+
+    .social {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+
+    .social a {
+      padding: 10px 20px;
+      background-color: transparent;
+      border: 2px solid cyan;
+      border-radius: 30px;
+      color: cyan;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+      box-shadow: 0 0 10px cyan;
+    }
+
+    .social a:hover {
+      background-color: cyan;
+      color: black;
+      box-shadow: 0 0 20px cyan;
+    }
+
+    .tagline {
+      margin-top: 20px;
+      font-style: italic;
+      font-size: 1.1rem;
+      color: #b3ffff;
+      min-height: 24px;
+    }
+
+    .skills, .projects {
+      margin-top: 40px;
+      max-width: 600px;
+      text-align: left;
+    }
+
+    .skills h3, .projects h3 {
+      color: cyan;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    .skills ul, .projects ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .skills li, .projects li {
+      background: rgba(0, 255, 255, 0.1);
+      padding: 8px 15px;
+      margin: 5px 0;
+      border-left: 4px solid cyan;
+      border-radius: 6px;
+    }
+
+    .projects a {
+      color: #00ffff;
+      text-decoration: none;
+    }
+
+    .projects a:hover {
+      text-decoration: underline;
+    }
+
+    #copyZaloBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: cyan;
+      color: black;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px cyan;
+    }
+
+    #copyZaloBtn:hover {
+      box-shadow: 0 0 20px cyan;
+    }
+
+    #clock {
+      margin-top: 15px;
+      font-size: 1.2rem;
+      color: #0ff;
+      text-shadow: 0 0 5px #0ff;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="galaxy"></canvas>
+
+  <div class="container">
+    <img class="avatar" src="https://i.imgur.com/G6RixMy.jpeg" alt="Mun Avatar">
+    <h1>🟢 Trần Hào (Mun)</h1>
+    <h2>💻 Developer | Tool Creator | MMO | DarkStack Founder</h2>
+
+    <div class="social">
+      <a href="https://www.facebook.com/profile.php?id=61577099144089" target="_blank">📘 Facebook</a>
+      <a href="https://zalo.me/0559705922" target="_blank">📱 Zalo</a>
+      <a href="https://tiktok.com/@Hmunrex_04" target="_blank">🎵 TikTok</a>
+      <a href="https://www.youtube.com/@Hmunrex" target="_blank">📺 YouTube</a>
+    </div>
+
+    <button id="copyZaloBtn">📋 Lưu số Zalo: 0559705922</button>
+
+    <p class="tagline" id="typewriter"></p>
+    <p id="clock"></p>
+
+    <div class="skills">
+      <h3>Kỹ năng nổi bật</h3>
+      <ul>
+        <li>✅ Python (Automation, Tool)</li>
+        <li>✅ JavaScript (Website, Discord Bot)</li>
+        <li>✅ HTML/CSS (UI đẹp, hiệu ứng)</li>
+        <li>✅ SEO & Tối ưu hóa Web</li>
+      </ul>
+    </div>
+
+    <div class="projects">
+      <h3>Các dự án nổi bật</h3>
+      <ul>
+        <li><a href="#">🔹 DarkStack DDoS Tool (2025)</a></li>
+        <li><a href="#">🔹 DarkStack Phone Lookup Pro Max</a></li>
+        <li><a href="#">🔹 Auto RegisterTool – Đăng ký nick tự động</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <iframe width="0" height="0" src="https://www.youtube.com/embed/nKpIVrgwrKI?autoplay=1&loop=1&playlist=nKpIVrgwrKI" frameborder="0" allow="autoplay" style="display: none;"></iframe>
+
+  <script>
+    // Galaxy stars animation
+    const canvas = document.getElementById('galaxy');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function createStars(count) {
+      stars = [];
+      for (let i = 0; i < count; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          radius: Math.random() * 1.5,
+          velocity: Math.random() * 0.5 + 0.2
+        });
+      }
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#ffffff";
+      stars.forEach(star => {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+        ctx.fill();
+      });
+    }
+
+    function animateStars() {
+      stars.forEach(star => {
+        star.y += star.velocity;
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      });
+      drawStars();
+      requestAnimationFrame(animateStars);
+    }
+
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      createStars(150);
+    });
+
+    resizeCanvas();
+    createStars(150);
+    animateStars();
+
+    // Typewriter quotes
+    const quotes = [
+      "Code là vũ khí, sáng tạo là đạn.",
+      "Tool mình viết – chất lượng nói lên tất cả.",
+      "Không cần nổi tiếng, chỉ cần uy tín.",
+      "DarkStack – nơi ý tưởng được hiện thực hoá."
+    ];
+    function rotateQuotes() {
+      const quote = quotes[Math.floor(Math.random() * quotes.length)];
+      document.getElementById("typewriter").innerHTML = quote;
+    }
+    setInterval(rotateQuotes, 5000);
+    rotateQuotes();
+
+    // Copy Zalo
+    document.getElementById("copyZaloBtn").onclick = () => {
+      navigator.clipboard.writeText("0559705922");
+      alert("Đã sao chép số Zalo!");
+    };
+
+    // Đồng hồ giờ Việt Nam
+    function updateClock() {
+      const nowUTC = new Date();
+      const vnTime = new Date(nowUTC.getTime() + 7 * 60 * 60 * 1000); // UTC + 7
+
+      const hours = vnTime.getUTCHours().toString().padStart(2, '0');
+      const minutes = vnTime.getUTCMinutes().toString().padStart(2, '0');
+      const seconds = vnTime.getUTCSeconds().toString().padStart(2, '0');
+
+      document.getElementById("clock").innerHTML = `🕒 ${hours}:${minutes}:${seconds} (Giờ Việt Nam)`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
