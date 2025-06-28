@@ -151,13 +151,63 @@
       color: #0ff;
       text-shadow: 0 0 5px #0ff;
     }
+
+    /* Footer ảnh */
+    .footer-images {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+      margin-bottom: 15px;
+      gap: 25px;
+    }
+
+    .footer-images img {
+      border-radius: 12px;
+      box-shadow: 0 0 20px cyan;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+
+    .footer-images img:hover {
+      transform: scale(1.05);
+    }
+
+    .footer-images .small-images {
+      display: flex;
+      gap: 25px;
+      justify-content: center;
+      width: 100%;
+      max-width: 650px;
+    }
+
+    .footer-images .large-image {
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .footer-images .small-images img {
+      max-width: 150px;
+      width: 100%;
+      box-shadow: 0 0 15px cyan;
+    }
+
+    /* Chủ quyền cuối trang */
+    .footer-copyright {
+      margin-top: 15px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      color: #33ffff;
+      text-shadow: 0 0 10px #33ffff;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
   <canvas id="galaxy"></canvas>
 
   <div class="container">
-    <img class="avatar" src="https://i.imgur.com/G6RixMy.jpeg" alt="Mun Avatar">
+    <img class="avatar" src="https://i.imgur.com/G6RixMy.jpeg" alt="Mun Avatar" />
     <h1>🟢 Trần Hào (Mun)</h1>
     <h2>💻 Developer | Tool Creator | MMO | DarkStack Founder</h2>
 
@@ -168,7 +218,7 @@
       <a href="https://www.youtube.com/@Hmunrex" target="_blank">📺 YouTube</a>
     </div>
 
-    <button id="toggleMusicBtn">🔊 Bật / Tắt nhạc</button>
+    <button id="toggleMusicBtn">🔊 Tắt nhạc</button>
 
     <p class="tagline" id="typewriter"></p>
     <p id="clock"></p>
@@ -191,50 +241,28 @@
         <li><a href="#">🔹 Auto RegisterTool – Đăng ký nick tự động</a></li>
       </ul>
     </div>
+
+    <div class="footer-images">
+      <img class="large-image" src="https://i.imgur.com/wQQBTIp.jpeg" alt="Ảnh lớn chủ quyền" />
+      <div class="small-images">
+        <img src="https://i.imgur.com/Uf0W7Op.jpeg" alt="Ảnh nhỏ 1" />
+        <img src="https://i.imgur.com/aIvDIff.jpeg" alt="Ảnh nhỏ 2" />
+      </div>
+    </div>
+
+    <div class="footer-copyright">
+       © 2025 Chủ quyền Website By TRẦN HÀO | DARKSTACK TEAM
+    </div>
+
   </div>
 
-  <!-- Nhạc nền ẩn bằng YouTube API -->
-  <div style="display: none;">
-    <div id="player"></div>
-  </div>
+  <!-- Nhạc nền ẩn bằng thẻ audio -->
+  <audio id="backgroundAudio" loop autoplay preload="auto" style="display:none">
+    <source src="https://pomf2.lain.la/f/l5nv41b6.mp3" type="audio/mpeg" />
+    Trình duyệt của bạn không hỗ trợ phần tử audio.
+  </audio>
 
-  <!-- YouTube Player API -->
-  <script src="https://www.youtube.com/iframe_api"></script>
   <script>
-    let player;
-    let isPlaying = true;
-
-    function onYouTubeIframeAPIReady() {
-      player = new YT.Player('player', {
-        height: '0',
-        width: '0',
-        videoId: 'nKpIVrgwrKI', // Mã video nhạc nền
-        playerVars: {
-          autoplay: 1,
-          loop: 1,
-          playlist: 'nKpIVrgwrKI'
-        },
-        events: {
-          'onReady': function(event) {
-            event.target.playVideo();
-          }
-        }
-      });
-    }
-
-    document.getElementById("toggleMusicBtn").addEventListener("click", () => {
-      if (!player) return;
-      if (isPlaying) {
-        player.pauseVideo();
-        isPlaying = false;
-        document.getElementById("toggleMusicBtn").innerText = "🔈 Bật nhạc";
-      } else {
-        player.playVideo();
-        isPlaying = true;
-        document.getElementById("toggleMusicBtn").innerText = "🔊 Tắt nhạc";
-      }
-    });
-
     // Galaxy stars
     const canvas = document.getElementById('galaxy');
     const ctx = canvas.getContext('2d');
@@ -302,17 +330,29 @@
     setInterval(rotateQuotes, 5000);
     rotateQuotes();
 
-    // Đồng hồ
+    // Clock
     function updateClock() {
-      const nowUTC = new Date();
-      const vnTime = new Date(nowUTC.getTime() + 7 * 60 * 60 * 1000);
-      const hours = vnTime.getUTCHours().toString().padStart(2, '0');
-      const minutes = vnTime.getUTCMinutes().toString().padStart(2, '0');
-      const seconds = vnTime.getUTCSeconds().toString().padStart(2, '0');
-      document.getElementById("clock").innerHTML = `🕒 ${hours}:${minutes}:${seconds} (Giờ Việt Nam)`;
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, "0");
+      const m = now.getMinutes().toString().padStart(2, "0");
+      const s = now.getSeconds().toString().padStart(2, "0");
+      document.getElementById("clock").textContent = `🕒 ${h}:${m}:${s}`;
     }
     setInterval(updateClock, 1000);
     updateClock();
+
+    // Music toggle
+    const audio = document.getElementById('backgroundAudio');
+    const btn = document.getElementById('toggleMusicBtn');
+    btn.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.play();
+        btn.textContent = '🔊 Tắt nhạc';
+      } else {
+        audio.pause();
+        btn.textContent = '🔈 Bật nhạc';
+      }
+    });
   </script>
 </body>
 </html>
